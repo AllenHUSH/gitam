@@ -2,6 +2,7 @@
 
 ## Instructions
 
+```
 Usage: index [options] [command]
 
 Options:
@@ -15,3 +16,4 @@ Commands:
   remove <flag>                  Remove a account.
   clear                          Remove the db file.
   help [command]                 display help for command
+```
