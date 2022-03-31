@@ -1,0 +1,9 @@
+{
+  "name": "gam",
+  "version": "1.0.0",
+  "description": "Git Account Manager",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^9.1.0"
+  }
+}
