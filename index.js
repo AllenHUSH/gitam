@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fsPromises = require("fs").promises;
 const child_process = require("child_process");
 const commander = require("commander");

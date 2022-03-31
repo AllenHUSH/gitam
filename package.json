@@ -1,7 +1,22 @@
 {
-  "name": "gam",
+  "name": "gitam",
   "version": "1.0.0",
+  "author": "allenhush",
   "description": "Git Account Manager",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AllenHUSH/gitam"
+  },
+  "keywords": [
+    "git",
+    "git account",
+    "git account manager",
+    "git account toggle"
+  ],
+  "bin": {
+    "gam": "index.js"
+  },
+  "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "commander": "^9.1.0"
