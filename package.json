@@ -18,6 +18,9 @@
     "gitam": "index.js"
   },
   "main": "index.js",
+  "files": [
+    "src/*"
+  ],
   "license": "MIT",
   "dependencies": {
     "commander": "^9.1.0"
