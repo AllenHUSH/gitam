@@ -1,6 +1,6 @@
 # GAM - Git Account Manager
 
-[English](./docs/en.md) | [中文](/README.md)
+[English](./docs/en.md) | 中文
 
 ## 安装
 
