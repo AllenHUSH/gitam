@@ -14,6 +14,40 @@ const INIT_JSON_DATA = {
   accounts: {},
 };
 
+class Account {
+  username = "";
+  email = "";
+  flag = "";
+
+  constructor(username, email, flag = "") {
+    this.username = username;
+    this.email = email;
+    this.flag = flag;
+  }
+
+  static isEqual(accountA, accountB) {
+    if (
+      accountA.username === accountB.username &&
+      accountA.email === accountB.email
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  stringify() {
+    return `${this.flag} | ${this.username} | ${this.email}`;
+  }
+}
+
+const execAysnc = (cmd) => {
+  return new Promise((resolve, reject) => {
+    child_process.exec(cmd, (error, stdout, stderr) => {
+      resolve({ error, stdout: stdout.replace(/[\r\n]/g, ""), stderr });
+    });
+  });
+};
+
 /**
  * @description 向 DB 文件中写入数据
  */
@@ -57,9 +91,34 @@ const getObject = async () => {
   return obj;
 };
 
-const logCurrentConfig = () => {
-  // TODO: log current config
-  console.log("Hello GAM");
+/**
+ * @description 执行 git 命令获取全局和当前存储库用户配置
+ */
+const logCurrentConfig = async () => {
+  const { stdout: localUserName } = await execAysnc(`git config user.name`);
+  const { stdout: localEmail } = await execAysnc(`git config user.email`);
+  const { stdout: globalUserName } = await execAysnc(
+    `git config --global user.name`
+  );
+  const { stdout: globalEmail } = await execAysnc(
+    `git config --global user.email`
+  );
+
+  const localAccount = new Account(localUserName, localEmail, "-");
+  const globalAccount = new Account(globalUserName, globalEmail, "-");
+
+  const { accounts } = await getObject();
+  for (const flag in accounts) {
+    if (Account.isEqual(localAccount, accounts[flag])) {
+      localAccount.flag = flag;
+    }
+    if (Account.isEqual(globalAccount, accounts[flag])) {
+      globalAccount.flag = flag;
+    }
+  }
+
+  console.log(`[Global]`, globalAccount.stringify());
+  console.log(`[Local]`, localAccount.stringify());
 };
 
 /**
@@ -92,7 +151,7 @@ const useAnAccount = async (flag, account, isGlobal = false) => {
   console.log(
     `🎉 Toggle success (scope: ${isGlobal ? "global" : "local repository"}).`
   );
-  logCurrentConfig();
+  await logCurrentConfig();
 };
 
 /**
@@ -131,7 +190,9 @@ const selectAnAccount = async (obj, isGlobal = false) => {
 commander
   .version(package.version)
   .description(package.description)
-  .action(logCurrentConfig);
+  .action(async () => {
+    await logCurrentConfig();
+  });
 
 commander
   .command("list")
