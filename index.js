@@ -57,6 +57,11 @@ const getObject = async () => {
   return obj;
 };
 
+const logCurrentConfig = () => {
+  // TODO: log current config
+  console.log("Hello GAM");
+};
+
 /**
  * @description 以表格的形式打印出已保存的账号
  * @param {*} obj
@@ -76,18 +81,24 @@ const listAccounts = async (obj) => {
 /**
  * @description 使用一个账号
  */
-const useAnAccount = async (flag, account) => {
+const useAnAccount = async (flag, account, isGlobal = false) => {
   const { username, email } = account;
-  child_process.exec(`git config --global user.name "${username}"`);
-  child_process.exec(`git config --global user.email "${email}"`);
-  console.log("🎉 Toggle success.");
-  console.log(flag, username, email);
+  child_process.exec(
+    `git config ${isGlobal ? "--global" : ""}  user.name "${username}"`
+  );
+  child_process.exec(
+    `git config ${isGlobal ? "--global" : ""} user.email "${email}"`
+  );
+  console.log(
+    `🎉 Toggle success (scope: ${isGlobal ? "global" : "local repository"}).`
+  );
+  logCurrentConfig();
 };
 
 /**
  * @description 通过命令行交互的方式，在已存储的列表中选择一个账号
  */
-const selectAnAccount = async (obj) => {
+const selectAnAccount = async (obj, isGlobal = false) => {
   const _obj = obj || (await getObject());
   const { accounts } = _obj;
 
@@ -110,14 +121,17 @@ const selectAnAccount = async (obj) => {
 
     if (!account) {
       console.log("❌ No this index or flag");
-      return selectAnAccount(_obj);
+      return selectAnAccount(_obj, isGlobal);
     } else {
-      return useAnAccount(flag, account);
+      return useAnAccount(flag, account, isGlobal);
     }
   });
 };
 
-commander.version(package.version).description(package.description);
+commander
+  .version(package.version)
+  .description(package.description)
+  .action(logCurrentConfig);
 
 commander
   .command("list")
@@ -148,7 +162,8 @@ commander
   .alias("u")
   .description("Use an account.")
   .argument("[flag]", "Account Flag")
-  .action(async (flag) => {
+  .option("-g, --global", "Set global config.")
+  .action(async (flag, { global }) => {
     const obj = await getObject();
 
     if (!Object.keys(obj.accounts).length) {
@@ -160,12 +175,12 @@ commander
 
     if (!flag) {
       await listAccounts(obj);
-      return selectAnAccount(obj);
+      return selectAnAccount(obj, global);
     }
 
     const account = obj.accounts[flag];
     if (account) {
-      useAnAccount(flag, account);
+      useAnAccount(flag, account, global);
     } else {
       console.log(
         "🤔 Not found the flag. You Can run `list` to show the list of accounts."
