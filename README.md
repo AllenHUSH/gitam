@@ -2,6 +2,8 @@
 
 ## Instructions
 
+Type `gam` or `gitam` in the terminal to start 🛫️
+
 ```
 Usage: index [options] [command]
 
@@ -10,10 +12,10 @@ Options:
   -h, --help                     display help for command
 
 Commands:
-  list                           List all accounts.
-  add <flag> <username> <email>  Add a account.
-  use <flag>                     Use a account.
-  remove <flag>                  Remove a account.
-  clear                          Remove the db file.
+  list|ls                        List all accounts.
+  add <flag> <username> <email>  Add an account.
+  use|u [flag]                   Use an account.
+  remove|rm <flag>               Remove an account.
+  clear                          Clear the db file.
   help [command]                 display help for command
 ```
