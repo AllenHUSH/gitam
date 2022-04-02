@@ -14,7 +14,8 @@
     "git account toggle"
   ],
   "bin": {
-    "gam": "index.js"
+    "gam": "index.js",
+    "gitam": "index.js"
   },
   "main": "index.js",
   "license": "MIT",
