@@ -19,7 +19,8 @@
   },
   "main": "index.js",
   "files": [
-    "src/*"
+    "src/*",
+    "docs/*"
   ],
   "license": "MIT",
   "dependencies": {
